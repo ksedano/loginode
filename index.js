@@ -9,13 +9,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 var LocalStorage = require('node-localstorage').LocalStorage;
 localStorage = new LocalStorage('./scratch');
 
-//users
-var users = {
-	"paco": "noni",
-	"oscar": "noni",
-	"kevin": "12345",
-};
-
 //muestro formulario login
 app.get('/login', function (req, res) {
   res.render('loginform');
@@ -23,14 +16,19 @@ app.get('/login', function (req, res) {
 
 //proceso los inputs del usuario
 app.post('/login', function (req, res) {
-  var user = "";
-  var inputUser = req.body.username;
-  //check username
-  if( inputUser in users ) {
-  	//check password
-  	if ( req.body.password == users[inputUser] ) {
-  		user = inputUser;
-  	}
+  var username = req.body.username;
+  var password = req.body.password;
+
+  //check usuario en localstorage
+  if (localStorage.getItem(username)) {
+    //check password en localstorage
+    if (password == localStorage.getItem(username)) {
+      user = username;
+    } else {
+      user = "";
+    }
+  } else {
+    user = "";
   }
 
   res.render('loginformPost', {user:user})
@@ -43,19 +41,27 @@ app.get('/register', function (req, res) {
 
 //proceso los inputs del usuario
 app.post('/register', function (req, res) {
-  var user = "";
-  var inputUser = req.body.username;
-  //check username
-  if( inputUser in users ) {
-  	//comprobamos que el usar no exista
-  }else{
-  	//check password
-  	if ( req.body.password1 == req.body.password2 ) {
-  		user = inputUser;
-  	}
-  }
+  var user = req.body.username;
+  var pass1 = req.body.password1;
+  var pass2 = req.body.password2;
 
-  res.render('registerformPost', {user:user})
+  //check passwords iguales
+  if (pass1==pass2) {
+    password ="YES";
+  }else{
+    password ="NO";
+  }
+  //check user existente en localstorage
+  if (localStorage.getItem(user)) {
+    username = "NO";
+  }else{
+    username = "YES";
+  }
+  //check usuario y contraseña, lo creamos en el localstorage
+  if (username == "YES" && password == "YES") {
+    localStorage.setItem(user, pass1)
+  }
+  res.render('registerformPost', {password:password,username:username})
 });
 
 app.listen(3000, function () {

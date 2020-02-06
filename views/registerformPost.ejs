@@ -6,10 +6,14 @@
 <body>
 	<h1>Register</h1>
 
-	<% if ( user ) { %>
-		<h2>Tenemos un nuevo camarada, bienvenido <%= user %></h2>
-	<% } else { %>
-		<h2>La cagaste crack</h2>
+	<% if ( username == "NO" || password == "NO" ) {
+		if ( username == "NO" ) { %>
+			<h2>Este nombre de usuario ya existe, la cagaste crack</h2>
+    	<% } else { %>
+    		<h2>Las contraseñas no coinciden, la cagaste crack</h2>
+		<% }
+	} else if ( username == "YES" && password == "YES" ) { %>
+		<h2> Todo correcto, bienvenido camarada</h2>
 	<% } %>
 </body>
 </html>
