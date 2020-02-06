@@ -9,6 +9,23 @@ app.use(bodyParser.urlencoded({ extended: false }));
 var LocalStorage = require('node-localstorage').LocalStorage;
 localStorage = new LocalStorage('./scratch');
 
+//app hello world
+app.get('/hello', function (req, res) {
+  res.send('Hello World!');
+});
+
+//app formulario
+app.get('/form', (req, res) => {
+  res.render('form', {name: 'name', pass: 'pass'});
+});
+
+//resultado entrada formulario
+app.post('/resultado', function(req, res) {
+  var name = req.body.name;
+  var pass = req.body.pass;
+  res.render('msj', {name: name, pass: pass});
+});
+
 //muestro formulario login
 app.get('/login', function (req, res) {
   res.render('loginform');
